@@ -1,0 +1,39 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [3]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [4]": {
+        "header": {
+          "open": true
+        }
+      },
+      "navX-Sensor[0]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Back Left  real Turn": "Mechanism2d",
+      "/SmartDashboard/Back Left commanded Turn": "Mechanism2d",
+      "/SmartDashboard/Back Right  real Turn": "Mechanism2d",
+      "/SmartDashboard/Back Right commanded Turn": "Mechanism2d",
+      "/SmartDashboard/Front Left  real Turn": "Mechanism2d",
+      "/SmartDashboard/Front Left commanded Turn": "Mechanism2d",
+      "/SmartDashboard/Front Right  real Turn": "Mechanism2d",
+      "/SmartDashboard/Front Right commanded Turn": "Mechanism2d"
+    }
+  }
+}
