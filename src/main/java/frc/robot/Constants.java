@@ -21,11 +21,17 @@ public final class Constants {
         public static final double kDTurning = 0.005;
     }
 
+    public static final class GyroConstants {
+        public static final int pigeonID = 21;
+        public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+        public static final String pigeonCanBUS = "canivore4308"; // change later ithink
+    }
+
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = Units.inchesToMeters(24);
+        public static final double kTrackWidth = Units.inchesToMeters(15.25);
         // Distance between right and left wheels
-        public static final double kWheelBase = Units.inchesToMeters(24);
+        public static final double kWheelBase = Units.inchesToMeters(15.25);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2),

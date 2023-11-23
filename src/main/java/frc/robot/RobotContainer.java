@@ -40,7 +40,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        stick.B.onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
+        stick.B.onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
     }
 
     public Command getAutonomousCommand() {

@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
+import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -11,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.GyroConstants;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
@@ -53,7 +53,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
             "Back Right");
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    public final Pigeon2 gyro = new Pigeon2(GyroConstants.pigeonID, GyroConstants.pigeonCanBUS);
 
     public SwerveModulePosition[] getModulePositions(){
 
@@ -69,25 +69,18 @@ public class SwerveSubsystem extends SubsystemBase {
             new Rotation2d(0), getModulePositions());
 
     public SwerveSubsystem() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-                zeroHeading();
-            } catch (Exception e) {
-            }
-        }).start();
+        gyro.configFactoryDefault();
+        zeroGyro();
     }
 
-    public void zeroHeading() {
-        gyro.reset();
+    public void zeroGyro() {
+        gyro.setYaw(0);
     }
 
-    public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
-    }
-
-    public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(getHeading());
+    public Rotation2d getYaw() {
+        return (GyroConstants.invertGyro)
+        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
+        : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
     public Pose2d getPose() {
@@ -95,13 +88,13 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        odometer.resetPosition(getRotation2d(), getModulePositions(), pose);
+        odometer.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
     @Override
     public void periodic() {
-        odometer.update(getRotation2d(), getModulePositions());
-        SmartDashboard.putNumber("Robot Heading", getHeading());
+        odometer.update(getYaw(), getModulePositions());
+        SmartDashboard.putNumber("Robot Yaw", getYaw().getDegrees());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
 
         // Update smartdashboard data for each swerve module object
