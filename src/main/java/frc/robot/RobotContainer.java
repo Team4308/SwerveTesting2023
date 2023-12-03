@@ -1,86 +1,56 @@
 package frc.robot;
 
-import java.util.List;
+import java.util.ArrayList;
 
+import ca.team4308.absolutelib.control.JoystickHelper;
 import ca.team4308.absolutelib.control.XBoxWrapper;
+import ca.team4308.absolutelib.math.DoubleUtils;
+import ca.team4308.absolutelib.math.Vector2;
+import ca.team4308.absolutelib.wrapper.LogSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class RobotContainer {
+    public final ArrayList<LogSubsystem> subsystems = new ArrayList<LogSubsystem>();
 
-    private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    // Subsystems
+    private final DriveSubsystem m_driveSubsystem;
 
+    // Commands
+    private final DriveCommand driveCommand;
+    
+    // Controllers
     public final XBoxWrapper stick = new XBoxWrapper(0);
     public final XBoxWrapper stick2 = new XBoxWrapper(1);
 
     public RobotContainer() {
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
-                swerveSubsystem,
-                () -> -stick.getLeftY(),
-                () -> stick.getLeftX(),
-                () -> stick.getRightX(),
-                () -> !stick.getRightButton()));
+        m_driveSubsystem = new DriveSubsystem();
+        subsystems.add(m_driveSubsystem);
 
-        configureButtonBindings();
+        driveCommand = new DriveCommand(m_driveSubsystem, () -> getDriveControl());
+        m_driveSubsystem.setDefaultCommand(driveCommand);
+
     }
 
-    private void configureButtonBindings() {
-        stick.B.onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
+    public Vector2 getDriveControl() {
+        double drive = DoubleUtils.normalize(stick.getLeftY());
+
+        double turn = DoubleUtils.normalize(stick.getRightX());
+
+        Vector2 control = new Vector2(drive, turn);
+        control = JoystickHelper.ScaledAxialDeadzone(control, 0.14);
+        control = JoystickHelper.scaleStick(control, 2);
+        control = JoystickHelper.clampStick(control);
+        return control;
     }
 
     public Command getAutonomousCommand() {
-        // 1. Create trajectory settings
-        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                        .setKinematics(DriveConstants.kDriveKinematics);
-
-        // 2. Generate trajectory
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                        new Translation2d(1, 0),
-                        new Translation2d(1, -1)),
-                new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
-                trajectoryConfig);
-
-        // 3. Define PID controllers for tracking trajectory
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        // 4. Construct command to follow trajectory
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                trajectory,
-                swerveSubsystem::getPose,
-                DriveConstants.kDriveKinematics,
-                xController,
-                yController,
-                thetaController,
-                swerveSubsystem::setModuleStates,
-                swerveSubsystem);
-
-        // 5. Add some init and wrap-up, and return everything
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-                swerveControllerCommand,
-                new InstantCommand(() -> swerveSubsystem.stopModules()));
+        return driveCommand;
     }
 }
