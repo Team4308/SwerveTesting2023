@@ -1,86 +1,91 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
-import java.util.List;
-
-import ca.team4308.absolutelib.control.XBoxWrapper;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.swervedrive.auto.Autos;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
+import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import java.io.File;
 
 public class RobotContainer {
 
-    private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+  
+  // CommandJoystick rotationController = new CommandJoystick(1);
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  CommandJoystick driverController = new CommandJoystick(1);
 
-    public final XBoxWrapper stick = new XBoxWrapper(0);
-    public final XBoxWrapper stick2 = new XBoxWrapper(1);
+  // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  XboxController driverXbox = new XboxController(0);
 
-    public RobotContainer() {
-        swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
-                swerveSubsystem,
-                () -> -stick.getLeftY(),
-                () -> stick.getLeftX(),
-                () -> stick.getRightX(),
-                () -> !stick.getRightButton()));
+  public RobotContainer() {
+    configureBindings();
 
-        configureButtonBindings();
-    }
+    AbsoluteDrive closedAbsoluteDrive = new AbsoluteDrive(drivebase,
+                                                          // Applies deadbands and inverts controls because joysticks
+                                                          // are back-right positive while robot
+                                                          // controls are front-left positive
+                                                          () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                                                                       OperatorConstants.LEFT_Y_DEADBAND),
+                                                          () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                                                                       OperatorConstants.LEFT_X_DEADBAND),
+                                                          () -> -driverXbox.getRightX(),
+                                                          () -> -driverXbox.getRightY());
 
-    private void configureButtonBindings() {
-        stick.B.onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
-    }
+    AbsoluteFieldDrive closedFieldAbsoluteDrive = new AbsoluteFieldDrive(drivebase,
+                                                                         () ->
+                                                                             MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                                                                                    OperatorConstants.LEFT_Y_DEADBAND),
+                                                                         () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                                                                                      OperatorConstants.LEFT_X_DEADBAND),
+                                                                         () -> driverXbox.getRawAxis(2));
+    TeleopDrive simClosedFieldRel = new TeleopDrive(drivebase,
+                                                    () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                                                                 OperatorConstants.LEFT_Y_DEADBAND),
+                                                    () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                                                                 OperatorConstants.LEFT_X_DEADBAND),
+                                                    () -> driverXbox.getRawAxis(2), () -> true);
+    TeleopDrive closedFieldRel = new TeleopDrive(
+        drivebase,
+        () -> MathUtil.applyDeadband(driverController.getY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverController.getX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverController.getRawAxis(3), () -> true);
 
-    public Command getAutonomousCommand() {
-        // 1. Create trajectory settings
-        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                        .setKinematics(DriveConstants.kDriveKinematics);
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ? closedAbsoluteDrive : closedFieldAbsoluteDrive);
+  }
 
-        // 2. Generate trajectory
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                        new Translation2d(1, 0),
-                        new Translation2d(1, -1)),
-                new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
-                trajectoryConfig);
+  private void configureBindings() {
 
-        // 3. Define PID controllers for tracking trajectory
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    //new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+  }
 
-        // 4. Construct command to follow trajectory
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                trajectory,
-                swerveSubsystem::getPose,
-                DriveConstants.kDriveKinematics,
-                xController,
-                yController,
-                thetaController,
-                swerveSubsystem::setModuleStates,
-                swerveSubsystem);
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return Autos.exampleAuto(drivebase);
+  }
 
-        // 5. Add some init and wrap-up, and return everything
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-                swerveControllerCommand,
-                new InstantCommand(() -> swerveSubsystem.stopModules()));
-    }
+  public void setDriveMode() {
+    //drivebase.setDefaultCommand();
+  }
+
+  public void setMotorBrake(boolean brake) {
+    drivebase.setMotorBrake(brake);
+  }
 }
