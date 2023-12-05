@@ -6,15 +6,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.Auton;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-public class FollowTrajectory extends SequentialCommandGroup
-{
+public class FollowTrajectory extends SequentialCommandGroup {
 
-  public FollowTrajectory(SwerveSubsystem drivebase, PathPlannerTrajectory trajectory, boolean resetOdometry)
-  {
+  public FollowTrajectory(SwerveSubsystem drivebase, PathPlannerTrajectory trajectory, boolean resetOdometry) {
     addRequirements(drivebase);
 
-    if (resetOdometry)
-    {
+    if (resetOdometry) {
       drivebase.resetOdometry(trajectory.getInitialHolonomicPose());
     }
 
@@ -26,7 +23,6 @@ public class FollowTrajectory extends SequentialCommandGroup
             Auton.yAutoPID.createPIDController(),
             Auton.angleAutoPID.createPIDController(),
             drivebase::setChassisSpeeds,
-            drivebase)
-               );
+            drivebase));
   }
 }
