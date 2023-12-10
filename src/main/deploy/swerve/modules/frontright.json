@@ -16,7 +16,7 @@
   },
   "conversionFactor": {
     "angle": 16.8,
-    "drive": 1.861684535
+    "drive": 0.538
   },
   "encoder": {
     "type": "analog",
