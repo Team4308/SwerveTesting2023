@@ -32,6 +32,6 @@ public final class Constants {
 
   public static class OperatorConstants {
     // Joystick Deadband
-    public static final double kInputDeadband = 0.1;
+    public static final double kInputDeadband = 0.01;
   }
 }
