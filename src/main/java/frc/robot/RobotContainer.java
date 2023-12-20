@@ -51,19 +51,21 @@ public class RobotContainer {
     AbsoluteFieldDrive closedFieldAbsoluteDrive = new AbsoluteFieldDrive(drivebase,
         () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> stick.getLeftTrigger());
+        () -> stick.getRightX());
 
     TeleopDrive simClosedFieldRel = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> stick.getLeftTrigger(), () -> true);
+        () -> stick2.getRightX(), () -> setDriveMode());
 
     TeleopDrive closedFieldRel = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(stick2.getLeftY(), OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick2.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> -stick2.getRightTrigger(), () -> true);
+        () -> -stick2.getRightX(), () -> setDriveMode());
 
-    drivebase.setDefaultCommand(!RobotBase.isSimulation() ? closedAbsoluteDrive : closedFieldAbsoluteDrive);
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ? (setDriveMode() ? closedAbsoluteDrive : closedFieldRel) 
+    : (setDriveMode() ? closedFieldAbsoluteDrive : simClosedFieldRel));
+
   }
 
   private void configureBindings() {
@@ -78,8 +80,8 @@ public class RobotContainer {
     return Autos.exampleAuto(drivebase);
   }
 
-  public void setDriveMode() {
-    // drivebase.setDefaultCommand();
+  public boolean setDriveMode() {
+    return stick.B.getAsBoolean();
   }
 
   public void setMotorBrake(boolean brake) {
