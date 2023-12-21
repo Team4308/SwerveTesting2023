@@ -56,15 +56,14 @@ public class RobotContainer {
     TeleopDrive simClosedFieldRel = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> stick2.getRightX(), () -> setDriveMode());
+        () -> stick.getRightX(), () -> setDriveMode());
 
     TeleopDrive closedFieldRel = new TeleopDrive(drivebase,
-        () -> MathUtil.applyDeadband(stick2.getLeftY(), OperatorConstants.kInputDeadband),
-        () -> MathUtil.applyDeadband(stick2.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> -stick2.getRightX(), () -> setDriveMode());
+        () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.kInputDeadband),
+        () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.kInputDeadband),
+        () -> -stick.getRightX(), () -> setDriveMode());
 
-    drivebase.setDefaultCommand(!RobotBase.isSimulation() ? (setDriveMode() ? closedAbsoluteDrive : closedFieldRel) 
-    : (setDriveMode() ? closedFieldAbsoluteDrive : simClosedFieldRel));
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ? closedFieldRel : simClosedFieldRel);
 
   }
 
@@ -81,7 +80,7 @@ public class RobotContainer {
   }
 
   public boolean setDriveMode() {
-    return stick.B.getAsBoolean();
+    return !stick.B.getAsBoolean();
   }
 
   public void setMotorBrake(boolean brake) {
