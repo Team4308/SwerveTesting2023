@@ -45,7 +45,7 @@ public class RobotContainer {
             OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick.getLeftX(),
             OperatorConstants.kInputDeadband),
-        () -> -stick.getRightX(),
+        () -> stick.getRightX(),
         () -> -stick.getRightY());
 
     AbsoluteFieldDrive closedFieldAbsoluteDrive = new AbsoluteFieldDrive(drivebase,
@@ -61,9 +61,9 @@ public class RobotContainer {
     TeleopDrive closedFieldRel = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> stick.getRightX(), () -> setDriveMode());
+        () -> -stick.getRightX(), () -> setDriveMode());
 
-    drivebase.setDefaultCommand(closedFieldRel);
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ? closedAbsoluteDrive : closedFieldAbsoluteDrive);
 
   }
 
