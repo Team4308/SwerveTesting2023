@@ -184,7 +184,7 @@ public class SwerveDrive
     // Initialize Telemetry
     if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.LOW.ordinal())
     {
-      //SmartDashboard.putData("Field", field);
+      SmartDashboard.putData("Field", field);
     }
 
     if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal())
@@ -423,7 +423,7 @@ public class SwerveDrive
     // Display commanded speed for testing
     if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
     {
-      //SmartDashboard.putString("RobotVelocity", velocity.toString());
+      SmartDashboard.putString("RobotVelocity", velocity.toString());
     }
     if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal())
     {
@@ -901,8 +901,8 @@ public class SwerveDrive
               "Module[" + module.configuration.name + "] Relative Encoder", module.getRelativePosition());
           SmartDashboard.putNumber(
               "Module[" + module.configuration.name + "] Absolute Encoder", module.getAbsolutePosition());
-          /*SmartDashboard.putNumber(
-                "Module[" + module.configuration.name + "] Absolute Encoder Read Issue", module.getAbsoluteEncoderReadIssue() ? 1 : 0);*/
+          SmartDashboard.putNumber(
+                "Module[" + module.configuration.name + "] Absolute Encoder Read Issue", module.getAbsoluteEncoderReadIssue() ? 1 : 0);
         }
         if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal())
         {
@@ -922,7 +922,7 @@ public class SwerveDrive
 
       if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal())
       {
-        //SwerveDriveTelemetry.updateData();
+        SwerveDriveTelemetry.updateData();
       }
     } catch (Exception e)
     {

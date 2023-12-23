@@ -11,7 +11,13 @@ import swervelib.encoders.CanAndCoderSwerve;
 import swervelib.encoders.PWMDutyCycleEncoderSwerve;
 import swervelib.encoders.SparkMaxEncoderSwerve;
 import swervelib.encoders.SwerveAbsoluteEncoder;
+import swervelib.imu.ADIS16448Swerve;
+import swervelib.imu.ADIS16470Swerve;
+import swervelib.imu.ADXRS450Swerve;
+import swervelib.imu.AnalogGyroSwerve;
 import swervelib.imu.NavXSwerve;
+import swervelib.imu.Pigeon2Swerve;
+import swervelib.imu.PigeonSwerve;
 import swervelib.imu.SwerveIMU;
 import swervelib.motors.SparkMaxBrushedMotorSwerve;
 import swervelib.motors.SparkMaxSwerve;
@@ -93,6 +99,14 @@ public class DeviceJson
     }
     switch (type)
     {
+      case "adis16448":
+        return new ADIS16448Swerve();
+      case "adis16470":
+        return new ADIS16470Swerve();
+      case "adxrs450":
+        return new ADXRS450Swerve();
+      case "analog":
+        return new AnalogGyroSwerve(id);
       case "navx":
       case "navx_spi":
         return new NavXSwerve(SPI.Port.kMXP);
@@ -107,6 +121,10 @@ public class DeviceJson
         return new NavXSwerve(Port.kUSB);
       case "navx_mxp":
         return new NavXSwerve(Port.kMXP);
+      case "pigeon":
+        return new PigeonSwerve(id);
+      case "pigeon2":
+        return new Pigeon2Swerve(id, canbus != null ? canbus : "");
       default:
         throw new RuntimeException(type + " is not a recognized absolute encoder type.");
     }
