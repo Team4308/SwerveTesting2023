@@ -217,7 +217,7 @@ public class SwerveMath
     double maxAccel           = 9.81 * horizontalDistance / robotCG.getZ();
     if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
     {
-      SmartDashboard.putNumber("calcMaxAccel", maxAccel);
+      //SmartDashboard.putNumber("calcMaxAccel", maxAccel);
     }
     return maxAccel;
   }
@@ -277,7 +277,7 @@ public class SwerveMath
     Translation2d currentVelocity = SwerveController.getTranslation2d(fieldVelocity);
     if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
     {
-      SmartDashboard.putNumber("currentVelocity", currentVelocity.getX());
+      //SmartDashboard.putNumber("currentVelocity", currentVelocity.getX());
     }
 
     // Calculate the commanded change in velocity by subtracting current velocity
@@ -285,7 +285,7 @@ public class SwerveMath
     Translation2d deltaV = commandedVelocity.minus(currentVelocity);
     if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
     {
-      SmartDashboard.putNumber("deltaV", deltaV.getX());
+      //SmartDashboard.putNumber("deltaV", deltaV.getX());
     }
 
     // Creates an acceleration vector with the direction of delta V and a magnitude

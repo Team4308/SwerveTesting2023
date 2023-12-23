@@ -43,7 +43,7 @@ public class AutoBalanceCommand extends CommandBase {
    */
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("At Tolerance", controller.atSetpoint());
+    //SmartDashboard.putBoolean("At Tolerance", controller.atSetpoint());
 
     double translationVal = MathUtil.clamp(controller.calculate(swerveSubsystem.getPitch().getDegrees(), 0.0), -0.5,
         0.5);

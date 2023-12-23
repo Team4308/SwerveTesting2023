@@ -76,7 +76,7 @@ public class SwerveDriveTelemetry
   /**
    * Upload data to smartdashboard
    */
-  public static void updateData()
+  /*public static void updateData()
   {
     SmartDashboard.putNumber("swerve/moduleCount", moduleCount);
     SmartDashboard.putNumberArray("swerve/wheelLocations", wheelLocations);
@@ -91,7 +91,7 @@ public class SwerveDriveTelemetry
     SmartDashboard.putNumber("swerve/maxAngularVelocity", maxAngularVelocity);
     SmartDashboard.putNumberArray("swerve/measuredChassisSpeeds", measuredChassisSpeeds);
     SmartDashboard.putNumberArray("swerve/desiredChassisSpeeds", desiredChassisSpeeds);
-  }
+  }*/
 
   /**
    * Verbosity of telemetry data sent back.
