@@ -15,6 +15,7 @@ import ca.team4308.absolutelib.control.JoystickHelper;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -71,7 +72,7 @@ public class RobotContainer {
 
     stick.A.onTrue((new InstantCommand(drivebase::zeroGyro)));
     stick.X.onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    // stick.B.whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    stick.B.whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   public Command getAutonomousCommand() {
