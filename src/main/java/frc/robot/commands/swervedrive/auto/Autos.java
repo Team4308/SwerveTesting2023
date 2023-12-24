@@ -51,15 +51,15 @@ public final class Autos {
       // Simple path with holonomic rotation. Stationary start/end. Max velocity of 4
       // m/s and max accel of 3 m/s^2
       example = PathPlanner.generatePath(
-          new PathConstraints(1, 0.75),
+          new PathConstraints(4, 3),
           new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
           // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(0, -1.1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(90)),
+          new PathPoint(new Translation2d(0, -1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180)),
           // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(-1.1, -1.1), Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(180)),
+          new PathPoint(new Translation2d(-1, -1), Rotation2d.fromDegrees(180), Rotation2d.fromDegrees(0)),
           // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(-1.1, 0), Rotation2d.fromDegrees(180), Rotation2d.fromDegrees(270)),
-          new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(270), Rotation2d.fromDegrees(360))
+          new PathPoint(new Translation2d(-1, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180)),
+          new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(180), Rotation2d.fromDegrees(0))
       );
     } else {
       List<PathPlannerTrajectory> example1 = PathPlanner.loadPathGroup("SamplePath", new PathConstraints(4, 3));
