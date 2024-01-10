@@ -127,6 +127,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.setFieldMode();
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
   }
@@ -136,6 +137,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    m_robotContainer.setDriveMode();
   }
 
   @Override
@@ -161,6 +163,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void simulationInit() {
+    m_robotContainer.setDriveMode();
   }
 
   /**
@@ -168,5 +171,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void simulationPeriodic() {
+    m_robotContainer.setDriveMode();
   }
 }

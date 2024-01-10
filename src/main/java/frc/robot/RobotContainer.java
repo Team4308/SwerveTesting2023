@@ -35,10 +35,14 @@ public class RobotContainer {
   public final XBoxWrapper stick = new XBoxWrapper(0);
   public final XBoxWrapper stick2 = new XBoxWrapper(1);
 
+  public final AbsoluteDrive closedAbsoluteDrive;
+  public final TeleopDrive closedFieldRel;
+
+
   public RobotContainer() {
     configureBindings();
 
-    AbsoluteDrive closedAbsoluteDrive = new AbsoluteDrive(drivebase,
+     closedAbsoluteDrive = new AbsoluteDrive(drivebase,
         // Applies deadbands and inverts controls because joysticks
         // are back-right positive while robot
         // controls are front-left positive
@@ -57,14 +61,14 @@ public class RobotContainer {
     TeleopDrive simClosedFieldRel = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> stick.getRightX(), () -> setDriveMode());
+        () -> stick.getRightX(), () -> setFieldMode());
 
-    TeleopDrive closedFieldRel = new TeleopDrive(drivebase,
+     closedFieldRel = new TeleopDrive(drivebase,
         () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.kInputDeadband),
         () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.kInputDeadband),
-        () -> -stick.getRightX(), () -> setDriveMode());
+        () -> -stick.getRightX(), () -> setFieldMode());
 
-    drivebase.setDefaultCommand(!RobotBase.isSimulation() ? closedAbsoluteDrive : closedFieldAbsoluteDrive);
+      drivebase.setDefaultCommand(closedAbsoluteDrive);
 
   }
 
@@ -80,8 +84,17 @@ public class RobotContainer {
     return Autos.exampleAuto(drivebase);
   }
 
-  public boolean setDriveMode() {
-    return !stick.B.getAsBoolean();
+  public boolean setFieldMode() {
+    return true;
+  }
+
+  public void setDriveMode() {
+    if (stick.LB.getAsBoolean()) {
+      drivebase.setDefaultCommand(closedFieldRel);
+    } else if (stick.RB.getAsBoolean()) {
+      drivebase.setDefaultCommand(closedAbsoluteDrive);
+    }
+
   }
 
   public void setMotorBrake(boolean brake) {
