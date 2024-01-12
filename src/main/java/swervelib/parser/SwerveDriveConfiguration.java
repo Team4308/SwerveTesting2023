@@ -39,10 +39,11 @@ public class SwerveDriveConfiguration
   /**
    * Create swerve drive configuration.
    *
-   * @param moduleConfigs    Module configuration.
-   * @param swerveIMU        Swerve IMU.
-   * @param invertedIMU      Invert the IMU.
-   * @param driveFeedforward The drive motor feedforward to use for the {@link SwerveModule}.
+   * @param moduleConfigs           Module configuration.
+   * @param swerveIMU               Swerve IMU.
+   * @param invertedIMU             Invert the IMU.
+   * @param driveFeedforward        The drive motor feedforward to use for the {@link SwerveModule}.
+   * @param physicalCharacteristics {@link SwerveModulePhysicalCharacteristics} to store in association with self.
    */
   public SwerveDriveConfiguration(
       SwerveModuleConfiguration[] moduleConfigs,
@@ -79,5 +80,16 @@ public class SwerveDriveConfiguration
       modArr[i] = new SwerveModule(i, swerves[i], driveFeedforward);
     }
     return modArr;
+  }
+
+  /**
+   * Assume the first module is the furthest. Usually front-left.
+   *
+   * @return Drive base radius from center of robot to the farthest wheel in meters.
+   */
+  public double getDriveBaseRadiusMeters()
+  {
+    Translation2d furthestModule = moduleLocationsMeters[0];
+    return Math.abs(Math.sqrt(Math.pow(furthestModule.getX(), 2) + Math.pow(furthestModule.getY(), 2)));
   }
 }

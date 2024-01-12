@@ -1,12 +1,15 @@
 package swervelib.parser.json;
 
-import com.revrobotics.SparkMaxRelativeEncoder.Type;
+import com.revrobotics.SparkRelativeEncoder.Type;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import swervelib.encoders.AnalogAbsoluteEncoderSwerve;
+import swervelib.encoders.CANCoderSwerve;
+import swervelib.encoders.CanAndCoderSwerve;
 import swervelib.encoders.PWMDutyCycleEncoderSwerve;
+import swervelib.encoders.SparkMaxAnalogEncoderSwerve;
 import swervelib.encoders.SparkMaxEncoderSwerve;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.imu.ADIS16448Swerve;
@@ -17,6 +20,7 @@ import swervelib.imu.NavXSwerve;
 import swervelib.imu.Pigeon2Swerve;
 import swervelib.imu.PigeonSwerve;
 import swervelib.imu.SwerveIMU;
+import swervelib.motors.SparkFlexSwerve;
 import swervelib.motors.SparkMaxBrushedMotorSwerve;
 import swervelib.motors.SparkMaxSwerve;
 import swervelib.motors.SwerveMotor;
@@ -59,11 +63,16 @@ public class DeviceJson
     switch (type)
     {
       case "none":
+        return null;
       case "integrated":
       case "attached":
-        return null;
+        return new SparkMaxEncoderSwerve(motor, 1);
+      case "sparkmax_analog":
+        return new SparkMaxAnalogEncoderSwerve(motor);
       case "canandcoder":
         return new SparkMaxEncoderSwerve(motor, 360);
+      case "canandcoder_can":
+        return new CanAndCoderSwerve(id);
       case "ma3":
       case "ctre_mag":
       case "rev_hex":
@@ -74,6 +83,8 @@ public class DeviceJson
       case "thrifty":
       case "analog":
         return new AnalogAbsoluteEncoderSwerve(id);
+      case "cancoder":
+        return new CANCoderSwerve(id, canbus != null ? canbus : "");
       default:
         throw new RuntimeException(type + " is not a recognized absolute encoder type.");
     }
@@ -120,7 +131,7 @@ public class DeviceJson
       case "pigeon2":
         return new Pigeon2Swerve(id, canbus != null ? canbus : "");
       default:
-        throw new RuntimeException(type + " is not a recognized absolute encoder type.");
+        throw new RuntimeException(type + " is not a recognized imu/gyroscope type.");
     }
   }
 
@@ -165,33 +176,15 @@ public class DeviceJson
       case "neo":
       case "sparkmax":
         return new SparkMaxSwerve(id, isDriveMotor);
+      case "sparkflex":
+        return new SparkFlexSwerve(id, isDriveMotor);
       case "falcon":
       case "talonfx":
         return new TalonFXSwerve(id, canbus != null ? canbus : "", isDriveMotor);
       case "talonsrx":
         return new TalonSRXSwerve(id, isDriveMotor);
       default:
-        throw new RuntimeException(type + " is not a recognized absolute encoder type.");
+        throw new RuntimeException(type + " is not a recognized motor type.");
     }
-  }
-
-  /**
-   * Create a {@link SwerveAbsoluteEncoder} from the data port on the motor controller.
-   *
-   * @param motor The motor to create the absolute encoder from.
-   * @return {@link SwerveAbsoluteEncoder} from the motor controller.
-   */
-  public SwerveAbsoluteEncoder createIntegratedEncoder(SwerveMotor motor)
-  {
-    switch (type)
-    {
-      case "sparkmax":
-        return new SparkMaxEncoderSwerve(motor, 1);
-      case "falcon":
-      case "talonfx":
-        return null;
-    }
-    throw new RuntimeException(
-        "Could not create absolute encoder from data port of " + type + " id " + id);
   }
 }
