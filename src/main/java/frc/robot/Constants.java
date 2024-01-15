@@ -49,11 +49,4 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.01;
     public static final double TURN_CONSTANT = 0.75;
   }
-
-  public static class AngleControl {
-    public static double kP = 0.005;
-    public static double kI = 0.0;
-    public static double kD = 0.0;
-    public static double kTolerance = 0.5;
-  }
 }
