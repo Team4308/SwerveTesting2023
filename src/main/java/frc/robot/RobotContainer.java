@@ -18,6 +18,7 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import java.io.File;
 
 import ca.team4308.absolutelib.control.XBoxWrapper;
@@ -31,8 +32,9 @@ public class RobotContainer
 {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve"));
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+  private final LimelightSubsystem limelight;
+
   public final XBoxWrapper stick = new XBoxWrapper(0);
   public final XBoxWrapper stick2 = new XBoxWrapper(1);
 
@@ -64,9 +66,9 @@ public class RobotContainer
                                                                          () -> stick.getRightX());
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                      () -> MathUtil.applyDeadband(stick.getLeftY(),
+                                                                      () -> MathUtil.applyDeadband(-stick.getLeftY(),
                                                                                                 OperatorConstants.LEFT_Y_DEADBAND),
-                                                                      () -> MathUtil.applyDeadband(stick.getLeftX(),
+                                                                      () -> MathUtil.applyDeadband(-stick.getLeftX(),
                                                                                                   OperatorConstants.LEFT_X_DEADBAND),
                                                                       () -> MathUtil.applyDeadband(stick.getRightX(),
                                                                                                   OperatorConstants.RIGHT_X_DEADBAND), 
@@ -86,6 +88,8 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(stick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(stick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> -stick.getRightX(), () -> true);
+
+    limelight = new LimelightSubsystem();
 
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ? closedAbsoluteDriveAdv : closedFieldAbsoluteDrive);
   }
@@ -125,5 +129,9 @@ public class RobotContainer
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);
+  }
+  
+  public Double getAimCommand(){
+    return limelight.getXAngle();
   }
 }
