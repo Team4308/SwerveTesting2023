@@ -41,21 +41,18 @@ public class AlignCommand extends Command {
 
   @Override
   public void initialize() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double output = DoubleUtils.clamp(angle_controller.calculate(control.getAsDouble()), Math.PI, -Math.PI);
-
+    double output = DoubleUtils.clamp(angle_controller.calculate(control.getAsDouble()), -Math.PI, Math.PI);
     swerve.drive(new Translation2d(0,0), output, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted){
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
   }
 
   // Returns true when the command should end.

@@ -109,7 +109,7 @@ public class RobotContainer
     stick.LB.onTrue(new InstantCommand(drivebase::zeroGyro));
 //    new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 //    stick.RB.whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-    stick.RB.whileTrue(new AlignCommand(drivebase, () -> getAlignCommand()));
+    stick.RB.whileTrue(new AlignCommand(drivebase, () -> getXAngle()));
   }
 
   /**
@@ -133,7 +133,7 @@ public class RobotContainer
     drivebase.setMotorBrake(brake);
   }
   
-  public Double getAlignCommand(){
+  public Double getXAngle(){
     return limelight.getXAngle();
   }
 }
