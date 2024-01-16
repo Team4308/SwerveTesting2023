@@ -17,7 +17,6 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.commands.AlignCommand;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import java.io.File;
@@ -109,7 +108,7 @@ public class RobotContainer
     stick.LB.onTrue(new InstantCommand(drivebase::zeroGyro));
 //    new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 //    stick.RB.whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-    stick.RB.whileTrue(new AlignCommand(drivebase, () -> getXAngle()));
+    stick.RB.onTrue(new InstantCommand(drivebase::align));
   }
 
   /**

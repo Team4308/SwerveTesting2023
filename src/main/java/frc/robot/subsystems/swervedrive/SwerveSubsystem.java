@@ -42,6 +42,8 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public        double      maximumSpeed = Units.feetToMeters(15.1);
 
+  public boolean align = false;
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
@@ -383,5 +385,17 @@ public class SwerveSubsystem extends SubsystemBase
   public void addFakeVisionReading()
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+  }
+
+  public void align() {
+    if (align) {
+      align = false;
+    } else {
+      align = true;
+    }
+  }
+
+  public boolean getAlign(){
+    return align;
   }
 }

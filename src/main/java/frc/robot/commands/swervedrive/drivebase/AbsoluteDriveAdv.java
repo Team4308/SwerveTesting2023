@@ -7,14 +7,18 @@ package frc.robot.commands.swervedrive.drivebase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import ca.team4308.absolutelib.math.DoubleUtils;
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
 
@@ -29,6 +33,9 @@ public class AbsoluteDriveAdv extends Command
   private final DoubleSupplier headingAdjust;
   private boolean initRotation = false;
   private final BooleanSupplier lookAway, lookTowards, lookLeft, lookRight;
+  private double omega;
+  private final LimelightSubsystem limelight = new LimelightSubsystem();
+  private final PIDController angle_controller = new PIDController(Constants.AngleControl.kP, Constants.AngleControl.kI, Constants.AngleControl.kD);
 
   /**
    * Used to drive a swerve robot in full field-centric mode.  vX and vY supply translation inputs, where x is
@@ -60,6 +67,8 @@ public class AbsoluteDriveAdv extends Command
     this.lookTowards = lookTowards;
     this.lookLeft = lookLeft;
     this.lookRight = lookRight;
+    angle_controller.setSetpoint(0.0);
+    angle_controller.setTolerance(Constants.AngleControl.kTolerance);
 
     addRequirements(swerve);
   }
@@ -131,8 +140,15 @@ public class AbsoluteDriveAdv extends Command
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
 
+    if (swerve.getAlign()) {
+      double control = limelight.getXAngle();
+      omega = DoubleUtils.clamp(angle_controller.calculate(control), -Math.PI, Math.PI);
+    } else {
+      omega = desiredSpeeds.omegaRadiansPerSecond;
+    }
+
     // Make the robot move
-    swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
+    swerve.drive(translation, omega, true);
   }
 
   // Called once the command ends or is interrupted.
@@ -148,5 +164,8 @@ public class AbsoluteDriveAdv extends Command
     return false;
   }
 
+  public void align() {
+
+  }
 
 }
