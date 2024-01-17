@@ -34,8 +34,10 @@ public class AbsoluteDriveAdv extends Command
   private boolean initRotation = false;
   private final BooleanSupplier lookAway, lookTowards, lookLeft, lookRight;
   private double omega;
+  private boolean fieldRelative;
   private final LimelightSubsystem limelight = new LimelightSubsystem();
-  private final PIDController angle_controller = new PIDController(Constants.AngleControl.kP, Constants.AngleControl.kI, Constants.AngleControl.kD);
+  private final PIDController rotation_controller = new PIDController(Constants.RotationControl.kP, Constants.RotationControl.kI, Constants.RotationControl.kD);
+  private final PIDController translation_controller = new PIDController(Constants.TranslationControl.kP, Constants.TranslationControl.kI, Constants.TranslationControl.kD);
 
   /**
    * Used to drive a swerve robot in full field-centric mode.  vX and vY supply translation inputs, where x is
@@ -67,8 +69,10 @@ public class AbsoluteDriveAdv extends Command
     this.lookTowards = lookTowards;
     this.lookLeft = lookLeft;
     this.lookRight = lookRight;
-    angle_controller.setSetpoint(0.0);
-    angle_controller.setTolerance(Constants.AngleControl.kTolerance);
+    rotation_controller.setSetpoint(0.0);
+    rotation_controller.setTolerance(Constants.RotationControl.kTolerance);
+    translation_controller.setSetpoint(0.0);
+    translation_controller.setTolerance(Constants.TranslationControl.kTolerance);
 
     addRequirements(swerve);
   }
@@ -140,15 +144,19 @@ public class AbsoluteDriveAdv extends Command
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
 
-    if (swerve.getAlign()) {
-      double control = limelight.getXAngle();
-      omega = DoubleUtils.clamp(angle_controller.calculate(control), -Math.PI, Math.PI);
-    } else {
-      omega = desiredSpeeds.omegaRadiansPerSecond;
+    omega = desiredSpeeds.omegaRadiansPerSecond;
+    fieldRelative = true;
+
+    if (swerve.getSpeaker()) {
+      omega = DoubleUtils.clamp(rotation_controller.calculate(limelight.getXAngle()), -Math.PI, Math.PI);
+    } 
+    if (swerve.getAmp()) {
+      translation = new Translation2d(1, DoubleUtils.clamp(translation_controller.calculate(limelight.getXAngle()), -1, 1));
+      fieldRelative = false;
     }
 
     // Make the robot move
-    swerve.drive(translation, omega, true);
+    swerve.drive(translation, omega, fieldRelative);
   }
 
   // Called once the command ends or is interrupted.
@@ -162,10 +170,6 @@ public class AbsoluteDriveAdv extends Command
   public boolean isFinished()
   {
     return false;
-  }
-
-  public void align() {
-
   }
 
 }

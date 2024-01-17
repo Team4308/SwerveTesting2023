@@ -108,8 +108,8 @@ public class RobotContainer
     stick.LB.onTrue(new InstantCommand(drivebase::zeroGyro));
 //    new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
     stick.RB.whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-    stick.Start.onTrue(new InstantCommand(drivebase::align));
-//    stick.Back.onTrue(new InstantCommand(drivebase::amp));
+    stick.Start.onTrue(new InstantCommand(drivebase::speaker));
+    stick.Back.onTrue(new InstantCommand(drivebase::amp));
   }
 
   /**

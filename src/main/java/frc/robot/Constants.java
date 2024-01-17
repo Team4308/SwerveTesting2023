@@ -50,12 +50,20 @@ public final class Constants
     public static final double TURN_CONSTANT = 0.75;
   }
   
-  public static class AngleControl 
+  public static class RotationControl 
   {
     public static double kP = 0.1;
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double kTolerance = 0.5;
+    public static double kTolerance = 0.1;
+  }
+
+  public static class TranslationControl
+  {
+    public static double kP = 0.1;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
+    public static double kTolerance = 0.1;
   }
 
   public static class Limelight
