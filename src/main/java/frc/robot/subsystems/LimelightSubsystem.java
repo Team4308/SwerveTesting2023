@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import ca.team4308.absolutelib.wrapper.LogSubsystem;
 
+import frc.robot.Constants;
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -19,6 +21,14 @@ public class LimelightSubsystem extends LogSubsystem {
 
     public double getXAngle() {
         return limelight.getEntry("tx").getDouble(0.0);
+    }
+
+    public double getYAngle() {
+        return limelight.getEntry("ty").getDouble(0.0);
+    }
+
+    public double getSpeakerDistance() {
+        return (Constants.Field.speakerHeight - Constants.Limelight.lensHeight) / Math.tan((Constants.Limelight.angle + getYAngle()) * (Math.PI / 180.0));
     }
 
     @Override

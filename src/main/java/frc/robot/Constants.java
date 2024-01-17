@@ -50,10 +50,22 @@ public final class Constants
     public static final double TURN_CONSTANT = 0.75;
   }
   
-  public static class AngleControl {
+  public static class AngleControl 
+  {
     public static double kP = 0.1;
     public static double kI = 0.0;
     public static double kD = 0.0;
     public static double kTolerance = 0.5;
+  }
+
+  public static class Limelight
+  {
+    public static double angle = 15;
+    public static double lensHeight = 30;
+  }
+
+  public static class Field
+  {
+    public static double speakerHeight = 132;
   }
 }
