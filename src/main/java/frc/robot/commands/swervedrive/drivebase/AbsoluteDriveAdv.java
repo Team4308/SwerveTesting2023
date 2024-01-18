@@ -148,9 +148,11 @@ public class AbsoluteDriveAdv extends Command
     fieldRelative = true;
 
     if (swerve.getSpeaker()) {
+      limelight.setPipeline(0);
       omega = DoubleUtils.clamp(rotation_controller.calculate(limelight.getXAngle()), -Math.PI, Math.PI);
     } 
     if (swerve.getAmp()) {
+      limelight.setPipeline(1);
       translation = new Translation2d(1, DoubleUtils.clamp(translation_controller.calculate(limelight.getXAngle()), -1, 1));
       fieldRelative = false;
     }
