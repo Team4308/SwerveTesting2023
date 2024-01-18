@@ -17,7 +17,7 @@ public class LimelightSubsystem extends LogSubsystem {
 
     public double getXAngle() {
         if (limelight.getEntry("tv").getDouble(0.0) == 0.0) {
-            return 100.0;
+            return 50.0;
         } else {
             return limelight.getEntry("tx").getDouble(0.0);
         }
