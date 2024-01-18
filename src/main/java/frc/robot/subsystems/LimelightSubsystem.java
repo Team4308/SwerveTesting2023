@@ -9,6 +9,7 @@ import frc.robot.Constants;
 public class LimelightSubsystem extends LogSubsystem {
 
     public static NetworkTable limelight;
+    public static NetworkTable botpose;
 
     public LimelightSubsystem(){
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -33,6 +34,21 @@ public class LimelightSubsystem extends LogSubsystem {
 
     public void setPipeline(double num) {
         limelight.getEntry("pipeline").setNumber(num);
+    }
+
+    public double getLatency() {
+        double[] botpose = limelight.getEntry("botpose").getDoubleArray(new double[] {});
+        return botpose[6];
+    }
+
+    public double getXPose() {
+        double[] botpose = limelight.getEntry("botpose").getDoubleArray(new double[] {});
+        return botpose[0];
+    }
+
+    public double getYPose() {
+        double[] botpose = limelight.getEntry("botpose").getDoubleArray(new double[] {});
+        return botpose[1];
     }
 
     @Override
