@@ -27,8 +27,8 @@ public final class Constants
   public static final class Auton
   {
 
-    public static final PIDFConfig TranslationPID     = new PIDFConfig(0.7, 0, 0);
-    public static final PIDFConfig angleAutoPID = new PIDFConfig(0.4, 0, 0.01);
+    public static final PIDFConfig TranslationPID = new PIDFConfig(0.7, 0, 0);
+    public static final PIDFConfig angleAutoPID   = new PIDFConfig(0.4, 0, 0.01);
 
     public static final double MAX_ACCELERATION = 2;
   }
@@ -44,32 +44,32 @@ public final class Constants
   {
 
     // Joystick Deadband
-    public static final double LEFT_X_DEADBAND = 0.01;
-    public static final double LEFT_Y_DEADBAND = 0.01;
+    public static final double LEFT_X_DEADBAND  = 0.01;
+    public static final double LEFT_Y_DEADBAND  = 0.01;
     public static final double RIGHT_X_DEADBAND = 0.01;
-    public static final double TURN_CONSTANT = 0.75;
+    public static final double TURN_CONSTANT    = 6;
   }
-  
+
   public static class RotationControl 
   {
-    public static double kP = 0.1;
+    public static double kP = 0.05;
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double kTolerance = 0.1;
+    public static double kTolerance = 0.5;
   }
 
   public static class TranslationControl
   {
-    public static double kP = 0.1;
+    public static double kP = 0.05;
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double kTolerance = 0.1;
+    public static double kTolerance = 0.5;
   }
 
   public static class Limelight
   {
     public static double angle = 15;
-    public static double lensHeight = 30;
+    public static double lensHeight = 15;
   }
 
   public static class Field

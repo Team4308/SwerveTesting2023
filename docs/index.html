@@ -122,10 +122,11 @@
             </div>
             <hr/>
             <div class="alert alert-secondary" role="alert">
-              The formula for the angle motor conversion factor is <br/> <code>360 / (angleGearRatio
-              * pulsePerRotation)</code> <br/> <br/>
-              The formula for the drive motor conversion factor is <br/> <code>(Math.PI *
-              wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)</code> <br/> <br/>
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.
+              <br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.
               You can also generate these by using <br/>
               <code>SwerveMath.calculateMetersPerRotation</code>
               <br/>
@@ -159,7 +160,7 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <div class="form-floating mb-3">
               <input class="form-control" id="swervedriveconversion_drive-input"
                      name="conversionFactor_drive"
-                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)"
+                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="swervedriveconversion_drive-input">Drive Motor
                 Conversion Factor</label>
@@ -245,7 +246,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             </div>
             <div class="form-floating mb-3">
               <select class="form-select" id="frontleftdrive_type-input" name="drive_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="talonfx">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -277,7 +279,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <hr/>
             <div class="form-floating mb-3">
               <select class="form-select" id="frontleftangle_type-input" name="angle_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="talonfx">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -309,16 +312,17 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             </div>
             <hr/>
             <div class="alert alert-secondary" role="alert">
-              The formula for the angle motor conversion factor is <br/> <code>360 / (angleGearRatio
-              * pulsePerRotation)</code> <br/> <br/>
-              The formula for the drive motor conversion factor is <br/> <code>(Math.PI *
-              wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)</code> <br/> <br/>
-              These conversion factor is applied to the PID on the motor controller.
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.
+              <br/>
+              These conversion factor is applied to the PID on the motor controller. <br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.
             </div>
             <div class="form-floating mb-3">
               <input class="form-control" id="frontleftconversion_angle-input"
                      name="conversionFactor_angle"
-                     placeholder="360 / (angleGearRatio * pulsePerRotation)"
+                     placeholder="360 / (angleGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="frontleftconversion_angle-input">Angle Motor Conversion
                 Factor</label>
@@ -326,14 +330,15 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <div class="form-floating mb-3">
               <input class="form-control" id="frontleftconversion_drive-input"
                      name="conversionFactor_drive"
-                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)"
+                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="frontleftconversion_drive-input">Drive Motor Conversion
                 Factor</label>
             </div>
             <hr/>
             <div class="alert alert-primary" role="alert">
-              CANandCoder has a <code>pulsePerRotation</code> of 1 in YAGSL.
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.
             </div>
             <div class="form-floating mb-3">
               <select class="form-select" id="frontleftencoder_type-input"
@@ -441,7 +446,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <div class="form-floating mb-3">
               <select class="form-select" id="frontrightdrive_type-input"
                       name="drive_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="talonfx">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -475,7 +481,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <div class="form-floating mb-3">
               <select class="form-select" id="frontrightangle_type-input"
                       name="angle_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="talonfx">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -507,16 +514,18 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             </div>
             <hr/>
             <div class="alert alert-secondary" role="alert">
-              The formula for the angle motor conversion factor is <br/> <code>360 / (angleGearRatio
-              * pulsePerRotation)</code> <br/> <br/>
-              The formula for the drive motor conversion factor is <br/> <code>(Math.PI *
-              wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)</code> <br/> <br/>
-              These conversion factor is applied to the PID on the motor controller.
+
+              These conversion factor is applied to the PID on the motor controller.<br/>
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.
+              <br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.
             </div>
             <div class="form-floating mb-3">
               <input class="form-control" id="frontrightconversion_angle-input"
                      name="conversionFactor_angle"
-                     placeholder="360 / (angleGearRatio * pulsePerRotation)"
+                     placeholder="360 / (angleGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="frontrightconversion_angle-input">Angle Motor
                 Conversion Factor</label>
@@ -524,14 +533,17 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <div class="form-floating mb-3">
               <input class="form-control" id="frontrightconversion_drive-input"
                      name="conversionFactor_drive"
-                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)"
+                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="frontrightconversion_drive-input">Drive Motor
                 Conversion Factor</label>
             </div>
             <hr/>
             <div class="alert alert-primary" role="alert">
-              CANandCoder has a <code>pulsePerRotation</code> of 1 in YAGSL.
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.<br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.
             </div>
             <div class="form-floating mb-3">
               <select class="form-select" id="frontrightencoder_type-input"
@@ -640,7 +652,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             </div>
             <div class="form-floating mb-3">
               <select class="form-select" id="backleftdrive_type-input" name="drive_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="falcon">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -672,7 +685,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <hr/>
             <div class="form-floating mb-3">
               <select class="form-select" id="backleftangle_type-input" name="angle_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="talonfx">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -703,10 +717,10 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             </div>
             <hr/>
             <div class="alert alert-secondary" role="alert">
-              The formula for the angle motor conversion factor is <br/> <code>360 / (angleGearRatio
-              * pulsePerRotation)</code> <br/> <br/>
-              The formula for the drive motor conversion factor is <br/> <code>(Math.PI *
-              wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)</code> <br/> <br/>
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.<br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.<br/>
               These conversion factor is applied to the PID on the motor controller.
             </div>
             <div class="form-floating mb-3">
@@ -720,14 +734,17 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <div class="form-floating mb-3">
               <input class="form-control" id="backleftconversion_drive-input"
                      name="conversionFactor_drive"
-                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)"
+                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="backleftconversion_drive-input">Drive Motor Conversion
                 Factor</label>
             </div>
             <hr/>
             <div class="alert alert-primary" role="alert">
-              CANandCoder has a <code>pulsePerRotation</code> of 1 in YAGSL.
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.<br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.
             </div>
             <div class="form-floating mb-3">
               <select class="form-select" id="backleftencoder_type-input"
@@ -836,7 +853,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             </div>
             <div class="form-floating mb-3">
               <select class="form-select" id="backrightdrive_type-input" name="drive_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="talonfx">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -869,7 +887,8 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <hr/>
             <div class="form-floating mb-3">
               <select class="form-select" id="backrightangle_type-input" name="angle_type">
-                <option selected value="sparkmax">NEO</option>
+                <option selected value="sparkmax">SparkMax</option>
+                <option selected value="sparkflex">SparkFlex</option>
                 <option value="falcon">Falcon</option>
                 <option value="talonfx">Kraken</option>
                 <option value="sparkmax_brushed">SparkMAX Brushed Mode</option>
@@ -901,16 +920,16 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             </div>
             <hr/>
             <div class="alert alert-secondary" role="alert">
-              The formula for the angle motor conversion factor is <br/> <code>360 / (angleGearRatio
-              * pulsePerRotation)</code> <br/> <br/>
-              The formula for the drive motor conversion factor is <br/> <code>(Math.PI *
-              wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)</code> <br/> <br/>
-              These conversion factor is applied to the PID on the motor controller.
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.<br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.<br/>
+              These conversion factor is applied to the PID on the motor controller.<br/>
             </div>
             <div class="form-floating mb-3">
               <input class="form-control" id="backrightconversion_angle-input"
                      name="conversionFactor_angle"
-                     placeholder="360 / (angleGearRatio * pulsePerRotation)"
+                     placeholder="360 / (angleGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="backrightconversion_angle-input">Angle Motor Conversion
                 Factor</label>
@@ -918,14 +937,18 @@ SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumS
             <div class="form-floating mb-3">
               <input class="form-control" id="backrightconversion_drive-input"
                      name="conversionFactor_drive"
-                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio * pulsePerRotation)"
+                     placeholder="(Math.PI * wheelDiameterInMeters) / (driveGearRatio)"
                      type="number" value="0">
               <label class="form-label" for="backrightconversion_drive-input">Drive Motor Conversion
                 Factor</label>
             </div>
             <hr/>
             <div class="alert alert-primary" role="alert">
-              CANandCoder has a <code>pulsePerRotation</code> of 1 in YAGSL.
+              The formula for the conversion factors is described in depth <a
+                href="https://yagsl.gitbook.io/yagsl/fundamentals/swerve-modules#conversion-factor">here</a>.
+              <br/>
+              IF you are using an absolute encoder attached to your SparkMAX this should be <code>360</code>
+              for the angle motor conversion factor.
             </div>
             <div class="form-floating mb-3">
               <select class="form-select" id="backrightencoder_type-input"
