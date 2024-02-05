@@ -17,13 +17,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.LimelightHelpers;
 import java.io.File;
+import java.sql.Driver;
 import java.util.function.DoubleSupplier;
+import java.util.Optional;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -305,6 +309,18 @@ public Command sysIdAngleMotorCommand() {
   @Override
   public void periodic()
   {
+    Optional<Alliance> optionalAlliance = DriverStation.getAlliance();
+    Alliance alliance = optionalAlliance.get();
+    Double latency = Timer.getFPGATimestamp() - (LimelightHelpers.getLatency_Pipeline("")/1000) - (LimelightHelpers.getLatency_Capture("")/1000);
+    Pose2d botPose;
+
+    if (alliance == Alliance.Blue) {
+      botPose = LimelightHelpers.getBotPose2d_wpiBlue("");
+    } else {
+      botPose = LimelightHelpers.getBotPose2d_wpiRed("");
+    }
+
+    swerveDrive.addVisionMeasurement(botPose, latency);
   }
 
   @Override
