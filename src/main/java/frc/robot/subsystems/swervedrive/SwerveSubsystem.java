@@ -319,7 +319,7 @@ public Command sysIdAngleMotorCommand() {
       botPose = LimelightHelpers.getBotPose2d_wpiRed("");
     }
 
-    swerveDrive.addVisionMeasurement(botPose, latency);
+//    swerveDrive.addVisionMeasurement(botPose, latency);
   }
 
   @Override

@@ -46,11 +46,11 @@ public class RobotContainer
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(stick.getLeftY(),
+                                                                   () -> MathUtil.applyDeadband(-stick.getLeftY(),
                                                                                                 OperatorConstants.LEFT_Y_DEADBAND),
-                                                                   () -> MathUtil.applyDeadband(stick.getLeftX(),
+                                                                   () -> MathUtil.applyDeadband(-stick.getLeftX(),
                                                                                                 OperatorConstants.LEFT_X_DEADBAND),
-                                                                   () -> MathUtil.applyDeadband(stick.getRightX(),
+                                                                   () -> MathUtil.applyDeadband(-stick.getRightX(),
                                                                                                 OperatorConstants.RIGHT_X_DEADBAND),
                                                                    stick.Y,
                                                                    stick.A,
